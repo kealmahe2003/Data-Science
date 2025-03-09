@@ -1,0 +1,59 @@
+Consultas SQL
+
+1. Total de ventas por categoria
+SELECT 
+    p.category, 
+    SUM(f.quantity * f.price) AS total_ventas
+FROM fact_sales f
+JOIN dim_product p ON f.category = p.category
+GROUP BY p.category
+ORDER BY total_ventas DESC;
+
+
+2. Clientes con mayor volumen de compras
+SELECT 
+    c.customer_id, 
+    c.gender, 
+    c.age, 
+    SUM(f.quantity * f.price) AS total_compras
+FROM fact_sales f
+JOIN dim_customer c ON f.customer_id = c.customer_id
+GROUP BY c.customer_id, c.gender, c.age
+ORDER BY total_compras DESC
+LIMIT 10;
+
+
+3. Métodos de pago más utilizados
+SELECT 
+    p.payment_method, 
+    COUNT(*) AS cantidad_transacciones
+FROM fact_sales f
+JOIN dim_payment p ON f.payment_method = p.payment_method
+GROUP BY p.payment_method
+ORDER BY cantidad_transacciones DESC;
+
+
+4. Comparación de ventas por mes
+SELECT 
+    d.year, 
+    d.month, 
+    SUM(f.quantity * f.price) AS total_ventas
+FROM fact_sales f
+JOIN dim_date d ON f.invoice_date = d.invoice_date
+GROUP BY d.year, d.month
+ORDER BY d.year, d.month;
+
+
+Indices
+
+-- Índice en la columna de categoría de productos para acelerar los cálculos de ventas por categoría
+CREATE INDEX idx_fact_sales_category ON fact_sales(category);
+
+-- Índice en customer_id para optimizar la búsqueda de clientes con mayor volumen de compras
+CREATE INDEX idx_fact_sales_customer ON fact_sales(customer_id);
+
+-- Índice en payment_method para optimizar la consulta de métodos de pago más utilizados
+CREATE INDEX idx_fact_sales_payment ON fact_sales(payment_method);
+
+-- Índice en invoice_date para mejorar la comparación de ventas por mes
+CREATE INDEX idx_fact_sales_invoice_date ON fact_sales(invoice_date);
