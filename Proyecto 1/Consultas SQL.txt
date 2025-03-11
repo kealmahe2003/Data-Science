@@ -9,6 +9,8 @@ JOIN dim_product p ON f.category = p.category
 GROUP BY p.category
 ORDER BY total_ventas DESC;
 
+Esto suma el total de ventas por cada categoría de producto.
+
 
 2. Clientes con mayor volumen de compras
 SELECT 
@@ -22,6 +24,8 @@ GROUP BY c.customer_id, c.gender, c.age
 ORDER BY total_compras DESC
 LIMIT 10;
 
+Esto obtiene los 10 clientes con mayor volumen de compras.
+
 
 3. Métodos de pago más utilizados
 SELECT 
@@ -31,6 +35,8 @@ FROM fact_sales f
 JOIN dim_payment p ON f.payment_method = p.payment_method
 GROUP BY p.payment_method
 ORDER BY cantidad_transacciones DESC;
+
+Esto cuenta cuántas veces se ha usado cada método de pago.
 
 
 4. Comparación de ventas por mes
@@ -42,6 +48,8 @@ FROM fact_sales f
 JOIN dim_date d ON f.invoice_date = d.invoice_date
 GROUP BY d.year, d.month
 ORDER BY d.year, d.month;
+
+Esto agrupa las ventas por año y mes para analizar la evolución mensual.
 
 
 Indices
